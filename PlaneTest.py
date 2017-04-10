@@ -11,8 +11,11 @@ class PlaneTest(unittest.TestCase):
 
         mocked_random_gauss = 5
 
+        def get_mocked_random_gauss(ignored1, ignored2):
+            return mocked_random_gauss
+
         initial_orientation = plane.plane_orientation
-        with mock.patch('random.gauss', lambda x: mocked_random_gauss):
+        with mock.patch('random.gauss', get_mocked_random_gauss):
             plane.process()
 
         self.assertEquals(plane.plane_orientation, initial_orientation + mocked_random_gauss)

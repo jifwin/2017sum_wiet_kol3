@@ -6,18 +6,18 @@ from Plane import Plane
 
 class PlaneTest(unittest.TestCase):
     def test_should_use_default_values_not_specified(self):
-        #given
+        # given
         plane = Plane()
 
-        #when
+        # when
 
-        #then
+        # then
         self.assertTrue(isinstance(plane.plane_orientation, int))
         self.assertTrue(isinstance(plane.turbulence_gauss_mean, int))
         self.assertTrue(isinstance(plane.turbulence_gauss_sigma, int))
 
     def test_should_apply_correction(self):
-        #given
+        # given
         plane = Plane(plane_orientation=15, turbulence_gauss_mean=5, turbulence_gauss_sigma=20)
 
         mocked_random_gauss = 5
@@ -28,38 +28,49 @@ class PlaneTest(unittest.TestCase):
 
         initial_orientation = plane.plane_orientation
 
-        #when
+        # when
         with mock.patch('random.gauss', get_mocked_random_gauss):
             plane.get_correction = lambda x: mocked_correction
             plane.process()
 
-        #then
+        # then
         self.assertEquals(plane.plane_orientation, initial_orientation + mocked_random_gauss + mocked_correction)
 
     def test_should_count_number_of_steps(self):
-        #given
+        # given
         plane = Plane()
         number_of_steps = 100
 
-        #when
+        # when
         for i in xrange(number_of_steps):
             plane.process()
 
-        #then
+        # then
         self.assertEqual(plane.NofStep, number_of_steps + 1)
 
     def test_should_use_opposite_direction_for_given_orientation(self):
-        #given
+        # given
         plane = Plane()
         orientation = 10
 
-        #when
+        # when
         correction = plane.get_correction(orientation)
 
-        #then
+        # then
         self.assertLess(correction, 0)
 
-    #todo: max
+    # todo: exact value
+
+    def test_should_not_exceed_max_in_correction(self):
+        # given
+        plane = Plane()
+        orientation = 50
+
+        # when
+        correction = plane.get_correction(orientation)
+
+        # then
+        self.assertEqual(correction, -plane.const_maxTiltCorrectionDegree)
 
 
 if __name__ == '__main__':

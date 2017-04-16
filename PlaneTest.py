@@ -154,7 +154,26 @@ class PlaneTest(unittest.TestCase):
         self.assertEqual(stdout.getvalue().count("Step Number"), number_of_steps)
 
     @mock.patch('sys.stdout', new_callable=StringIO)
-    def test_should_print_orientation(self, stdout):
+    def test_should_print_orientation_with_turbulance(self, stdout):
+        # given
+        plane = Plane()
+        initial_orientation = plane.plane_orientation
+
+        mocked_random_gauss = 2.5
+
+        def get_mocked_random_gauss(ignored1, ignored2):
+            return mocked_random_gauss
+
+        # when
+        with mock.patch('random.gauss', get_mocked_random_gauss):
+            plane.process()
+
+        # then
+        getvalue = stdout.getvalue()
+        self.assertTrue(str(initial_orientation+mocked_random_gauss) in getvalue)
+
+    @mock.patch('sys.stdout', new_callable=StringIO)
+    def test_should_print_corrected_orientation(self, stdout):
         # given
         plane = Plane()
 

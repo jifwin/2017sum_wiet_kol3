@@ -1,7 +1,6 @@
 import unittest
 
 import mock
-import re
 
 from Plane import Plane
 from StringIO import StringIO
@@ -153,6 +152,17 @@ class PlaneTest(unittest.TestCase):
 
         # then
         self.assertEqual(stdout.getvalue().count("Step Number"), number_of_steps)
+
+    @mock.patch('sys.stdout', new_callable=StringIO)
+    def test_should_print_orientation(self, stdout):
+        # given
+        plane = Plane()
+
+        # when
+        plane.process()
+
+        # then
+        self.assertTrue(str(plane.plane_orientation) in stdout.getvalue())
 
 
 if __name__ == '__main__':

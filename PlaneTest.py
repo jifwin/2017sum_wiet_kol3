@@ -1,7 +1,10 @@
 import unittest
 
 import mock
+import re
+
 from Plane import Plane
+from StringIO import StringIO
 
 
 class PlaneTest(unittest.TestCase):
@@ -137,6 +140,19 @@ class PlaneTest(unittest.TestCase):
 
         # then
         # no exceptions
+
+    @mock.patch('sys.stdout', new_callable=StringIO)
+    def test_should_print_each_step_on_stdout(self, stdout):
+        # given
+        plane = Plane()
+        number_of_steps = 10
+
+        # when
+        for i in xrange(number_of_steps):
+            plane.process()
+
+        # then
+        self.assertEqual(stdout.getvalue().count("Step Number"), number_of_steps)
 
 
 if __name__ == '__main__':

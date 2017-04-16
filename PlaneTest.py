@@ -127,8 +127,18 @@ class PlaneTest(unittest.TestCase):
         # then
         self.assertEqual(plane.plane_orientation, 0)
 
+    def test_should_work_for_multiple_steps(self):
+        # given
+        plane = Plane()
+
+        # when
+        for i in xrange(100):
+            plane.process()
+
+        # then
+        # no exceptions
+
 
 if __name__ == '__main__':
     unittest.main()
 
-# todo: 12 tests

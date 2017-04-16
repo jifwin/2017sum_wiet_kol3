@@ -92,6 +92,41 @@ class PlaneTest(unittest.TestCase):
         # then
         self.assertEqual(correction, -plane.const_maxTiltCorrectionDegree)
 
+    def test_should_return_to_balance_in_one_step_for_small_orientation(self):
+        # given
+        plane = Plane()
+        plane.plane_orientation = 5
+
+        mocked_random_gauss = 0
+
+        def get_mocked_random_gauss(ignored1, ignored2):
+            return mocked_random_gauss
+
+        # when
+        with mock.patch('random.gauss', get_mocked_random_gauss):
+            plane.process()
+
+        # then
+        self.assertEqual(plane.plane_orientation, 0)
+
+    def test_should_return_to_balance_in_two_steps_for_large_orientation(self):
+        # given
+        plane = Plane()
+        plane.plane_orientation = 18
+
+        mocked_random_gauss = 0
+
+        def get_mocked_random_gauss(ignored1, ignored2):
+            return mocked_random_gauss
+
+        # when
+        with mock.patch('random.gauss', get_mocked_random_gauss):
+            plane.process()
+            plane.process()
+
+        # then
+        self.assertEqual(plane.plane_orientation, 0)
+
 
 if __name__ == '__main__':
     unittest.main()

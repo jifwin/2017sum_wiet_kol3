@@ -48,7 +48,7 @@ class PlaneTest(unittest.TestCase):
         # then
         self.assertEqual(plane.NofStep, number_of_steps + 1)
 
-    def test_should_use_opposite_direction_for_given_orientation(self):
+    def test_should_use_opposite_direction_for_given_small_orientation(self):
         # given
         plane = Plane()
         orientation = 10
@@ -59,7 +59,27 @@ class PlaneTest(unittest.TestCase):
         # then
         self.assertLess(correction, 0)
 
-    # todo: exact value
+    def test_should_use_opposite_direction_for_given_large_orientation(self):
+        # given
+        plane = Plane()
+        orientation = 50
+
+        # when
+        correction = plane.get_correction(orientation)
+
+        # then
+        self.assertLess(correction, 0)
+
+    def test_should_use_opposite_value_of_orientation_for_correction(self):
+        # given
+        plane = Plane()
+        orientation = 5
+
+        # when
+        correction = plane.get_correction(orientation)
+
+        # then
+        self.assertEqual(correction, -orientation)
 
     def test_should_not_exceed_max_in_correction(self):
         # given
